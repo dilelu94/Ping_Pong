@@ -1,0 +1,138 @@
+[gd_scene load_steps=13 format=3 uid="uid://dyqgt2aarftcf"]
+
+[ext_resource type="Script" path="res://Level/Level.gd" id="1_tjo81"]
+[ext_resource type="PackedScene" uid="uid://bb5yr3rqbt1gp" path="res://Player/Player.tscn" id="1_x445r"]
+[ext_resource type="FontFile" uid="uid://20t3b5t3v5xs" path="res://assets/ARCADECLASSIC.TTF" id="2_6gcty"]
+[ext_resource type="PackedScene" uid="uid://m0wj41u4m0au" path="res://Opponent/Opponent.tscn" id="2_m3yqk"]
+[ext_resource type="PackedScene" uid="uid://ccr5w4fbujjdy" path="res://Ball/Ball.tscn" id="3_hgi21"]
+[ext_resource type="AudioStream" uid="uid://duo1iuvmssrao" path="res://assets/ScorePositive.wav" id="6_6jp8d"]
+[ext_resource type="AudioStream" uid="uid://mqjh3ee58vjy" path="res://assets/Bounce.wav" id="7_evak0"]
+[ext_resource type="AudioStream" uid="uid://cf1cfh47ewbkb" path="res://assets/ScoreNegative.wav" id="7_msd83"]
+
+[sub_resource type="FontVariation" id="FontVariation_c4pyt"]
+base_font = ExtResource("2_6gcty")
+
+[sub_resource type="FontVariation" id="FontVariation_q18ak"]
+base_font = ExtResource("2_6gcty")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v5lnv"]
+size = Vector2(1280.5, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o6nwv"]
+size = Vector2(11, 723)
+
+[node name="Level" type="Node2D"]
+script = ExtResource("1_tjo81")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0.0862745, 0.12549, 0.14902, 1)
+
+[node name="PlayerScore" type="Label" parent="."]
+offset_left = 540.0
+offset_top = 360.0
+offset_right = 580.0
+offset_bottom = 404.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = SubResource("FontVariation_c4pyt")
+theme_override_font_sizes/font_size = 40
+text = "PS"
+
+[node name="OpponentScore" type="RichTextLabel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 720.0
+offset_top = 360.0
+offset_right = 841.0
+offset_bottom = 400.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(20, 20)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = SubResource("FontVariation_q18ak")
+theme_override_font_sizes/normal_font_size = 40
+text = "OP
+"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="CountdownTimerLabel" type="Label" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -400.0
+offset_right = 1280.0
+offset_bottom = 720.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.8, 0.364706, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = SubResource("FontVariation_c4pyt")
+theme_override_font_sizes/font_size = 70
+text = "CountDown
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player" parent="." instance=ExtResource("1_x445r")]
+position = Vector2(25, 360)
+
+[node name="Opponent" parent="." instance=ExtResource("2_m3yqk")]
+position = Vector2(1255, 360)
+
+[node name="WallTop" type="StaticBody2D" parent="."]
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallTop"]
+position = Vector2(639.75, -10)
+shape = SubResource("RectangleShape2D_v5lnv")
+
+[node name="WallBottom" type="StaticBody2D" parent="."]
+position = Vector2(0, 740)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallBottom"]
+position = Vector2(639.75, -10)
+shape = SubResource("RectangleShape2D_v5lnv")
+
+[node name="Ball" parent="." instance=ExtResource("3_hgi21")]
+position = Vector2(640, 360)
+
+[node name="Left" type="Area2D" parent="."]
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Left"]
+position = Vector2(-5.5, 360.5)
+shape = SubResource("RectangleShape2D_o6nwv")
+
+[node name="Right" type="Area2D" parent="."]
+position = Vector2(1291, 0)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Right"]
+position = Vector2(-5.5, 360.5)
+shape = SubResource("RectangleShape2D_o6nwv")
+
+[node name="CountdownTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="PlayerScoreSound" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(720, 360)
+stream = ExtResource("6_6jp8d")
+
+[node name="OpponentScoreSound" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(720, 360)
+stream = ExtResource("7_msd83")
+
+[node name="CollisionSound" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(720, 360)
+stream = ExtResource("7_evak0")
+
+[connection signal="body_entered" from="Left" to="." method="_on_left_body_entered"]
+[connection signal="body_entered" from="Right" to="." method="_on_right_body_entered"]
+[connection signal="timeout" from="CountdownTimer" to="." method="_on_countdown_timer_timeout"]

@@ -1,0 +1,12 @@
+AudioStreamPlayer2D
+Timer
+Label
+RichTextLabel
+CollisionShape2D
+Area2D
+Sprite2D
+CharacterBody2D
+ColorRect
+Control
+StaticBody2D
+Node2D
