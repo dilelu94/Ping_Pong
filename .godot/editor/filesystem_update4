@@ -1,8 +1,5 @@
-res://Player/Player.tscn
+res://Opponent/Opponent.tscn
+res://Ball/Ball.gd
 res://Player/Player.gd
 res://Level/Level.tscn
-res://Opponent/Opponent.tscn
 res://Ball/Ball.tscn
-res://Ball/Ball.gd
-res://Opponent/Opponent.gd
-res://Level/Level.gd
